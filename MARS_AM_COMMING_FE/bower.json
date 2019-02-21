@@ -1,0 +1,16 @@
+{
+  "name": "mars-am-comming",
+  "version": "0.0.1",
+  "dependencies": {
+    "angular": "^1.7.7",
+    "angular-ui-router": "^1.0.20",
+    "components-font-awesome": "^5.4.2",
+    "bootstrap": "^4.3.1",
+    "jquery": "^3.3.1",
+    "angular-bootstrap": "^2.5.0",
+    "angularUtils-pagination": "angular-utils-pagination#^0.11.1",
+    "highcharts": "^7.0.3"
+  },
+  "appPath": "app",
+  "moduleName": "mars-am-comming"
+}

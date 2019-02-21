@@ -1,0 +1,92 @@
+<div class="section" ng-controller="DashboardController">
+
+    <div class="container">
+        <!-- /.row -->
+        <fieldset class="scheduler-border">
+            <legend class="scheduler-border"> Sélectionner une mission</legend>
+            <div class="well">
+                <div class="row">
+                    <form data-toggle="validator" role="form" class="col-lg-12">
+                        <!--  -->
+                        <div class="col-lg-12">
+                            <select ng-model="mission" class="form-control"
+                                    ng-change="initCharts(mission)"
+                                    ng-options="mission.name for mission in missions track by mission.id"> </select>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+            <div class="well">
+                <div class="row">
+                    <div class="col-lg-4">
+
+                        <label class="control-label"><b> Libellé</b></label>
+
+                        <input class="form-control" type="text" ng-value="mission.name">
+
+                    </div>
+                    <div class="col-lg-4">
+                        <label class="control-label"><b> Date début</b></label>
+
+                        <input class="form-control" type="text" ng-value="mission.debut | date: 'dd/MM/yyyy'">
+
+                    </div>
+                    <div class="col-lg-4">
+                        <label class="control-label"><b> Date fin</b></label>
+
+                        <input class="form-control" type="text" ng-value="mission.fin | date: 'dd/MM/yyyy'">
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label class="control-label"><b> Quantité totale</b></label>
+
+                        <input class="form-control" type="text" ng-value="mission.nombreTotal">
+
+                    </div>
+                    <div class="col-lg-4">
+                        <label class="control-label"><b> Poids total (Kg)</b></label>
+
+                        <input class="form-control" type="text" ng-value="mission.totalPoids">
+
+                    </div>
+                    <div class="col-lg-4">
+                        <label class="control-label"><b>Limite poids (Kg)</b></label>
+
+                        <input class="form-control" type="text" ng-value="mission.limitePoid">
+
+                    </div>
+                </div>
+            </div>
+            <div class="well">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div id="prioritycategoriecontainer"></div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div id="poidsequicategoriecontainer"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="well">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div id="nbrequicategoriecontainer"></div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div id="containerPie"></div>
+                    </div>
+
+                </div>
+            </div>
+
+        </fieldset>
+
+    </div>
+    <!-- /.container -->
+
+</div>
+<!-- /.section-colored -->

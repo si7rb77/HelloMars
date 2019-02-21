@@ -1,0 +1,14 @@
+{
+  "name": "mars-am-comming",
+  "private": true,
+  "cacheDirectories": [
+    "node_modules",
+    "bower_components"
+  ],
+  "devDependencies": {
+    "bower": "^1.7.9"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  }
+}

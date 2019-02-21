@@ -1,0 +1,287 @@
+<div class="section" ng-controller="MissionController">
+
+    <div class="container">
+        <fieldset class="scheduler-border">
+            <legend class="scheduler-border"> Planification des Missions</legend>
+            <div class="well">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <form data-toggle="validator" role="form">
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <div class="input-icon">
+
+                                        <label class="control-label" for="name">Libellé</label>
+                                        <input type="text" class="form-control" ng-model="mission.name" required
+                                               ng-disabled="lockEdit" id="name" placeholder="Libellé">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label class="control-label" for="debut">Date début</label>
+                                    <input type="date" class="form-control" ng-model="mission.debut" id="debut"
+                                           ng-disabled="lockEdit" required
+                                           placeholder="Date début">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="control-label" for="fin">Date fin</label>
+                                    <input type="date" class="form-control" ng-model="mission.fin" id="fin" required
+                                           placeholder="Date fin" ng-disabled="lockEdit">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="control-label" for="limite">Limite poids (Kg) </label>
+                                    <input type="number" step="any" class="form-control" ng-model="mission.limitePoid"
+                                           id="limite" ng-change="controlLimite()" required
+                                           placeholder="Limite Poids" ng-disabled="lockEdit">
+                                    <span style="color: red" ng-show="showLimitesPoidsMsg"> * Vous dépassez la limite de poids définis pour cette mission</span>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label class="control-label" for="desc">Description</label>
+                                    <textarea row="2" type="text" class="form-control" ng-model="mission.description"
+                                              id="desc" ng-disabled="lockEdit"
+                                              placeholder="Description"> </textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class=" form-group col-lg-12">
+                                    <div class="table-responsive"></div>
+                                    <table class="table table-stripped">
+                                        <thead>
+                                        <tr>
+                                            <th style="width: 35px;" >#</th>
+                                            <th>Catégorie</th>
+                                            <th>Equipement</th>
+                                            <th style="width: 110px;">Poids (Kg)</th>
+                                            <th style="width: 190px;">Priorité</th>
+                                            <th style="width: 110px;">Quantité</th>
+                                            <th style="width: 140px;">Poids Net (Kg)</th>
+                                            <th style="width: 50px;"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td>
+                                                <select ng-model="equip.equipement.categorie" class="form-control"
+                                                        ng-disabled="lockEdit"
+                                                        ng-change="getEquiementByCategorie(equip.equipement.categorie)"
+                                                        ng-options="cat.name for cat in categories track by cat.id"> </select>
+
+                                            </td>
+
+                                            <td>
+                                                <select ng-model="equip.equipement" class="form-control"
+                                                        ng-disabled="lockEdit"
+                                                        ng-options="eq.name for eq in equipementsReferentiel track by eq.id"> </select>
+                                            </td>
+                                            <td >
+                                                <input type="number" step="any" ng-value="equip.equipement.poids"
+                                                       ng-disabled="true" class="form-control">
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       ng-value="equip.equipement.categorie.priority | priorityFilter"
+                                                       ng-disabled="true" class="form-control">
+                                            </td>
+                                            <td >
+                                                <input type="number" step="any" ng-disabled="lockEdit"
+                                                       ng-model="equip.nombre" class="form-control">
+                                            </td>
+                                            <td >
+                                                <input type="number" step="any" ng-disabled="true"
+                                                       ng-value="equip.equipement.poids * equip.nombre"
+                                                       ng-model="equip.poidsEquipement" class="form-control">
+                                            </td>
+
+                                            <td >
+                                                <button class="btn  btn-primary  btn-primary" type="button"
+                                                        ng-disabled="lockEdit"
+                                                        ng-click="addEquipement(equip)">
+                                                    <i class="fa fa-save"> </i>
+                                                </button>
+
+                                            </td>
+
+                                        </tr>
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class=" form-group col-lg-12">
+                                    <div class="table-responsive"></div>
+                                    <table class="table table-stripped">
+
+
+                                        <tbody>
+                                        <tr ng-repeat="equip in mission.equipementList">
+                                            <td style="width: 35px;">{{$index+1}}</td>
+
+                                            <td>
+                                                <input type="text" id="categorie" ng-model="equip.equipement.categorie"
+                                                       ng-value="equip.equipement.categorie.name" class="form-control"
+                                                       ng-disabled="true"> </input>
+
+                                            </td>
+
+                                            <td>
+                                                <input type="text" id="equip" ng-model="equip.equipement"
+                                                       ng-value="equip.equipement.name" class="form-control"
+                                                       ng-disabled="true"> </select>
+                                            </td>
+                                            <td style="width: 110px;" >
+                                                <input type="number" step="any" ng-value="equip.equipement.poids"
+                                                       ng-disabled="true" class="form-control">
+                                            </td>
+                                            <td  style="width: 190px;" >
+                                                <input type="text"
+                                                       ng-value="equip.equipement.categorie.priority | priorityFilter"
+                                                       ng-disabled="true" class="form-control">
+                                            </td>
+                                            <td style="width: 110px;" >
+                                                <input type="number" step="any"  ng-disabled="true"
+                                                       ng-model="equip.nombre" class="form-control">
+                                            </td>
+                                            <td style="width: 140px;" >
+                                                <input type="number" step="any" ng-disabled="true"
+                                                       ng-value="equip.equipement.poids * equip.nombre"
+                                                       ng-model="equip.poidsEquipement" class="form-control">
+                                            </td>
+
+                                            <td style="width: 50px;" >
+                                                <button class="btn  btn-primary  btn-danger" type="button"
+                                                        ng-disabled="lockEdit"
+                                                        ng-click="removeEquipement($index )">
+                                                    <i class="fa fa-trash"> </i>
+                                                </button>
+
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td colspan="6"
+                                                style="text-align: right; font-weight: bold;">Quantité totale
+                                            </td>
+                                            <td style="width: 140px;" ><input type="number" step="any" class="form-control"
+                                                       ng-model="mission.nombreTotal"
+                                                       ng-disabled="true">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="6"
+                                                style="text-align: right; font-weight: bold">Poids total (Kg)
+                                            </td>
+                                            <td style="width: 140px;" >
+                                                <input type="number" class="form-control" step="any" ng-change="controlLimite()"
+                                                       ng-model="mission.totalPoids" ng-disabled="true">
+                                            </td>
+                                        </tr>
+
+
+                                        </tbody>
+                                    </table>
+                                    <span style="color: red ; float: right" ng-show="showLimitesPoidsMsg"> * Vous dépassez la limite de poids définis pour cette mission</span>
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="form-actions">
+
+                                <button type="submit" ng-click="saveMission()" class="btn btn-primary btn-dark"
+                                        ng-disabled="lockEdit"
+                                        style="float: right"><i class="fas fa-check"></i> Enregistrer
+                                </button>
+
+                                <button type="reset" ng-click="resetForm()" class="btn btn-primary btn-danger"
+
+                                        style="float: right ;margin-right: 5px;"><i class="fas fa-eraser"></i>
+                                    Initialiser
+                                </button>
+
+                            </div>
+
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="well">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <input type="text" class="form-control" ng-model="search"
+                                   placeholder="Rechercher" id="search">
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="table-responsive">
+
+                        <table class="table table-striped table-hover">
+                            <thead>
+                            <tr>
+
+                                <th style="text-align: center">Libellé</th>
+
+                                <th style="text-align: center">Date debut</th>
+                                <th style="text-align: center">Date fin</th>
+
+                                <th style="text-align: center">Limite Poids (Kg)</th>
+                                <th style="text-align: center"> Poids (Kg) </th>
+                                <th style="text-align: center">Description</th>
+
+                                <th style="text-align: center">Options</th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <!--   <tr    dir-paginate="categ in categories | itemsPerPage: 2" pagination-id="categs">-->
+
+                            <tr ng-repeat="miss in missions |filter:search">
+
+                                <td style="text-align: center">{{miss.name}}</td>
+                                <td style="text-align: center">{{miss.debut | date: "dd/MM/yyyy"}}</td>
+                                <td style="text-align: center">{{miss.fin | date: "dd/MM/yyyy" }}</td>
+                                <td style="text-align: center">{{miss.limitePoid}}</td>
+                                <td style="text-align: center">{{miss.totalPoids}}</td>
+                                <td style="text-align: center">{{miss.description}}</td>
+
+
+                                <td align="center">
+
+                                    <button class="btn btn-info" type="button"
+                                            title="Détails" ng-click="detailMission(miss)">
+                                        <i class="fa fa-info-circle"></i> <span></span>
+                                    </button>
+
+                                    <button class="btn btn-primary" type="button"
+                                            title="Modifier" ng-click="updateMission(miss)">
+                                        <i class="fa fa-pencil-alt"></i> <span></span>
+                                    </button>
+
+                                    <button class="btn btn-danger" type="button"
+                                            title="Suprimmer" ng-click="deleteMission(miss)">
+                                        <i class="fa fa-trash"></i> <span></span>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </fieldset>
+    </div>
+</div>
